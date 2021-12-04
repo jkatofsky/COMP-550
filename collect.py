@@ -76,6 +76,7 @@ if __name__ == "__main__":
     parser.add_argument('--output_filename', type=str, required=True)
     parser.add_argument('--time_filter', type=str, default=None)
     parser.add_argument('--max_comments_per_post', type=int, default=None)
+    parser.add_argument('--with_user_flair_only', type=bool, default=False)
     args = parser.parse_args()
 
     get_comments(subreddit=args.subreddit,
@@ -84,4 +85,4 @@ if __name__ == "__main__":
                  time_filter=args.time_filter,
                  max_comments_per_post=args.max_comments_per_post,
                  save_to_filename=args.output_filename,
-                 with_user_flair_only=True)
+                 with_user_flair_only=args.with_user_flair_only)
