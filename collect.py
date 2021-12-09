@@ -4,6 +4,7 @@ import re
 import pandas as pd
 import csv
 import argparse
+from datetime import datetime
 import logging
 
 from secrets import ID, SECRET
@@ -27,7 +28,7 @@ def clean_comment(comment):
     return re.sub(r'http\S+', '', comment)
 
 
-def get_comments(subreddit, limit, post_sort, time_filter=None,
+def get_comments(subreddit, num_posts, post_sort, time_filter=None,
                     max_comments_per_post=None, save_to_filename=None, with_user_flair_only=False):
 
     if not time_filter:
@@ -36,11 +37,11 @@ def get_comments(subreddit, limit, post_sort, time_filter=None,
         max_comments_per_post = math.inf
 
     if post_sort == 'new':
-        posts = reddit.subreddit(subreddit).new(limit=limit)
+        posts = reddit.subreddit(subreddit).new(limit=num_posts)
     elif post_sort == 'hot':
-        posts = reddit.subreddit(subreddit).hot(limit=limit)
+        posts = reddit.subreddit(subreddit).hot(limit=num_posts)
     elif post_sort == 'top':
-        posts = reddit.subreddit(subreddit).top(limit=limit, time_filter=time_filter)
+        posts = reddit.subreddit(subreddit).top(limit=num_posts, time_filter=time_filter)
     
     comments = []
 
@@ -57,13 +58,18 @@ def get_comments(subreddit, limit, post_sort, time_filter=None,
 
             if hasattr(comment, 'body') and comment.body \
                 and (not with_user_flair_only or comment.author_flair_text):
-                comments.append((clean_comment(comment.body), comment.author_flair_text))
+                comments.append((clean_comment(comment.body),
+                                comment.author_flair_text,
+                                comment.author.name,
+                                datetime.utcfromtimestamp(int(comment.created_utc)).strftime("%m/%d/%Y, %H:%M:%S"),
+                                comment.link_id,
+                                comment.id))
                 collected += 1
-
-            comment_queue.extend(comment.replies)
+            if hasattr(comment, 'replies'):
+                comment_queue.extend(comment.replies)
         print(f'{len(comments)} comments collected.')
 
-    df = pd.DataFrame(comments, columns=['comment', 'flair'])
+    df = pd.DataFrame(comments, columns=['comment', 'flair', 'username', 'time', 'post_id', 'comment_id'])
     if save_to_filename:
         df.to_csv(save_to_filename, index=False, quoting=csv.QUOTE_ALL)
     return df
@@ -71,7 +77,7 @@ def get_comments(subreddit, limit, post_sort, time_filter=None,
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--subreddit', type=str, required=True)
-    parser.add_argument('--limit', type=int, required=True)
+    parser.add_argument('--num_posts', type=int, required=True)
     parser.add_argument('--post_sort', type=str, required=True)
     parser.add_argument('--output_filename', type=str, required=True)
     parser.add_argument('--time_filter', type=str, default=None)
@@ -80,7 +86,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     get_comments(subreddit=args.subreddit,
-                 limit=args.limit, 
+                 num_posts=args.num_posts, 
                  post_sort=args.post_sort,
                  time_filter=args.time_filter,
                  max_comments_per_post=args.max_comments_per_post,
