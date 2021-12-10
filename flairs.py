@@ -3,11 +3,10 @@ import argparse
 
 def get_flairs(comments_csv,flairs_csv):
     df = pd.read_csv(comments_csv)
-    flairs = df["flair"].to_list()
-    flairs = list(set(flairs))
-    flairs.sort()
-    flairs = pd.DataFrame(flairs)
-    flairs.to_csv(flairs_csv, header=False, index=False)
+    df.drop(df.columns.difference(["flair"]), axis=1, inplace=True)
+    df.drop_duplicates(subset="flair", inplace=True)
+    df.sort_values(by="flair", inplace=True)
+    df.to_csv(flairs_csv, header=False, index=False)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
