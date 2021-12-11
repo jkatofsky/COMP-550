@@ -1,19 +1,27 @@
 import pandas as pd 
 import argparse
 
-def get_flairs(comments_csv,flairs_csv):
-    df = pd.read_csv(comments_csv)
-    df.drop(df.columns.difference(["flair"]), axis=1, inplace=True)
-    df.drop_duplicates(subset="flair", inplace=True)
-    df.sort_values(by="flair", inplace=True)
-    df.to_csv(flairs_csv, header=False, index=False)
+def get_flairs(comments_csvs, flairs_csv):
+    dfs = []
+    for comment_csv in comments_csvs:
+        dfs.append(pd.read_csv(comment_csv))
+    df = pd.concat(dfs)
+    flairs = pd.Series(sorted(df['flair'].unique()))
+    flairs.to_csv(flairs_csv, index=False)
+
+    # df.drop(df.columns.difference(["flair"]), axis=1, inplace=True)
+    # df.drop_duplicates(subset="flair", inplace=True)
+    # df.sort_values(by="flair", inplace=True)
+    # df.to_csv(flairs_csv, header=False, index=False)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--comments_csv', 
+        '--comments_csvs', 
+        nargs='+',
         type=str,
-        default="data/1000-new-posts-all-comments-only-flairs.csv"
+        required=True
     )
     parser.add_argument(
         '--flairs_csv', 
@@ -22,4 +30,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    get_flairs(args.comments_csv, args.flairs_csv)
+    get_flairs(args.comments_csvs, args.flairs_csv)
