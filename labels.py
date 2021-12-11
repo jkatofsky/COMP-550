@@ -1,6 +1,7 @@
 import pandas as pd
 import argparse
 
+# These are all present flairs from the subreddit
 math_sci = ['Computer Science', 'Mathematics & Statistics', 'Software Engineering',
             'Computer Engineering', 'Electrical Engineering']
 physical_sci = ['Atmospheric Science', 'Chemistry', 'Geology', 'Physics'
@@ -26,6 +27,8 @@ agriculture_environment = ['Environment', 'Agricultural & Environmental Science'
                            'Environment', 'Food Science', 'Human Nutrition',
                            'Plant Science', 'Geography', 'Urban Planning']
 law = ['Law']
+
+# TODO: programmatically add variations here; science -> sci, engineering -> eng
 label_to_flairs = {'Math Sciences': math_sci,
                    'Physical Sciences': physical_sci,
                    'Life Sciences': life_sci,
@@ -38,11 +41,12 @@ label_to_flairs = {'Math Sciences': math_sci,
                    'Agriculture and Environment': agriculture_environment,
                    'Law': law}
 
-# this is super naïve; going to try some heuristics after
+# TODO: figure out a way to add stems/acryonyms such as CS, poli, econ, IDS, etc. May require tokenization
+
 def flair_to_label(row):
     flair = row['flair']
     for label, possible_flairs in label_to_flairs.items():
-        if flair in possible_flairs:
+        if any(possible_flair.lower() in flair.lower() for possible_flair in possible_flairs):
             return label
     return 'UNKNOWN'
 
