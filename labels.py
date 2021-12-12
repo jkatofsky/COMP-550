@@ -59,14 +59,14 @@ for label in label_to_flairs:
             label_to_flairs[label].append(flair.replace('chemistry', 'chem'))
 
 def tokenize_flair(flair: str):
-    flair = flair.lower()
-    all_ngrams = [flair]
-    cleaned_flair = flair
+    og_flair = flair.lower()
+    all_ngrams = [og_flair]
+    cleaned_flair = og_flair
     for punc in string.punctuation:
         cleaned_flair = cleaned_flair.replace(punc, '')
     cleaned_flair = ' '.join((token for token in cleaned_flair.split()
                             if token not in set(stopwords.words('english'))))
-    for flair in [flair, cleaned_flair]:
+    for flair in [og_flair, cleaned_flair]:
         split_flair = flair.split()
         for n in range(1, len(split_flair) + 1):
             ngrams = nltk.ngrams(split_flair, n)
@@ -87,7 +87,7 @@ def comment_flairs_to_label(in_csvs, out_csv):
     dfs = []
     for comment_csv in in_csvs:
         dfs.append(pd.read_csv(comment_csv))
-    df = pd.concat(dfs)
+    df = pd.concat(dfs).drop_duplicates(['comment_id']).reset_index(drop=True)
     df['label'] = df.apply(flair_to_label, axis=1)
     print('Number of each label:')
     print(df['label'].value_counts())
