@@ -33,16 +33,23 @@ agriculture_environment = ['Environment', 'Agricultural & Environmental Science'
 law = ['Law']
 
 # TODO: keep going with the adding of different stems/acronyms
-label_to_flairs = {'Math Sciences': math_sci + ['Mathematics', 'Math', 'CS'],
-                   'Physical Sciences': physical_sci,
-                   'Life Sciences': life_sci + ['Psych'],
-                   'Management': management,
-                   'Medicine': medicine + ['Med'],
+label_to_flairs = {'Math Sciences': math_sci 
+                                + ['Mathematics', 'Math', 'CS', 'Stats', 'Statistics'],
+                   'Physical Sciences': physical_sci 
+                                + ['Mech Engineering'],
+                   'Life Sciences': life_sci 
+                                + ['Psych', 'Kin'],
+                   'Management': management + ['Fine'],
+                   'Medicine': medicine 
+                                + ['Med'],
                    'Music': music,
                    'Education': education,
-                   'Humanities': humanities,
-                   'Social Sciences': social_science + ['Poli Science', 'Poli', 'Soci', 'IDS', 'Econ'],
-                   'Agriculture and Environment': agriculture_environment + ['Enviro', 'Environmental Science'],
+                   'Humanities': humanities 
+                                + ['History', 'Art History', 'Communications', 'French'],
+                   'Social Sciences': social_science 
+                                + ['Poli Science', 'Poli', 'Soci', 'IDS', 'Econ', 'Anth', 'Anthro'],
+                   'Agriculture and Environment': agriculture_environment 
+                                + ['Enviro', 'Environmental Science'],
                    'Law': law}
 for label in label_to_flairs:
     label_to_flairs[label] = [flair.lower() for flair in label_to_flairs[label]]
@@ -104,10 +111,10 @@ if __name__ == "__main__":
         required=True
     )
     parser.add_argument(
-        '--flairs_csv', 
+        '--dataset_csv', 
         type=str,
         default="data/dataset.csv"
     )
     args = parser.parse_args()
 
-    comment_flairs_to_label(args.comments_csvs, args.flairs_csv)
+    comment_flairs_to_label(args.comments_csvs, args.dataset_csv)
