@@ -5,7 +5,7 @@ from sklearn.cluster import KMeans
 
 # read comments, vectorization 
 df = pd.read_csv("../../data/dataset.csv", lineterminator='\n')
-df = df.head(100)
+df = df.head(100) # TODO: delete me, I'm just for testing
 
 # TODO: this is contextualized embedding, need n-gram vectorization too
 # TODO: better code style for different vectorization methods
