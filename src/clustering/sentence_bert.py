@@ -6,7 +6,7 @@ import spacy_sentence_bert
 def sentence_bert(dataset):
     nlp = spacy_sentence_bert.load_model('en_stsb_roberta_base')
     X = []
-    for index, row in dataset.iterrows():
-        if row["label"] != "UNKNOWN":
-            X.append(nlp(row["comment"]).vector)
+    df = dataset[dataset["label"] != "UNKNOWN"]
+    for index, row in df.iterrows():
+        X.append(nlp(row["comment"]).vector)
     return np.array(X)

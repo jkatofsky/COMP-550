@@ -7,17 +7,19 @@ from sklearn.cluster import KMeans
 df = pd.read_csv("../../data/dataset.csv", lineterminator='\n')
 df = df.head(100) # TODO: delete me, I'm just for testing
 
-# TODO: this is contextualized embedding, need n-gram vectorization too
+
 # TODO: better code style for different vectorization methods
-
-sBERT = True
-
-if not sBERT:
+vectorizer = "ngram"
+if vectorizer == "USE":
     from universal_sentence_encoder import universal_sentence_encoder
     X = universal_sentence_encoder(df)
-else:
+elif vectorizer == "sBERT":
     from sentence_bert import sentence_bert
     X = sentence_bert(df)
+else:
+    from ngram import ngram
+    X = ngram(df, analyzer='word') # TODO: better way of parameterizing ngram
+
 
 # clustering
 kmeans = KMeans(n_clusters=11, random_state=0).fit(X) # NOTE: 11 clusters for 11 majors

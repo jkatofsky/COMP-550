@@ -6,7 +6,7 @@ import spacy_universal_sentence_encoder
 def universal_sentence_encoder(dataset):
     nlp = spacy_universal_sentence_encoder.load_model('en_use_lg')
     X = []
-    for index, row in dataset.iterrows():
-        if row["label"] != "UNKNOWN":
-            X.append(nlp(row["comment"]).vector)
+    df = dataset[dataset["label"] != "UNKNOWN"]
+    for index, row in df.iterrows():
+        X.append(nlp(row["comment"]).vector)
     return np.array(X)
