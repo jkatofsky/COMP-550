@@ -10,11 +10,10 @@ def get_sw():
     # NOTE: sw is a list
     return sw
 
-def ngram(dataset, ngram_range=(5,5), analyzer='word'):
+def ngram(df, ngram_range=(5,5), analyzer='word'):
     # NOTE: analyzer{‘word’, ‘char’, ‘char_wb’} or callable, default=’word’
     #       ‘char’ is character-by-character ngram
     vectorizer = CountVectorizer(stop_words=get_sw(), ngram_range=ngram_range, analyzer=analyzer)
-    df = dataset[dataset["label"] != "UNKNOWN"]
     X = vectorizer.fit_transform(df["comment"])
     print(vectorizer.get_feature_names_out()) 
     return X
