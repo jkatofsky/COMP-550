@@ -5,3 +5,4 @@ praw==7.5.0
 scikit_learn==1.0.1
 spacy_sentence_bert==0.1.2
 spacy_universal_sentence_encoder==0.4.3
+tqdm==4.62.3
