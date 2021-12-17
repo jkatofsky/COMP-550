@@ -1,6 +1,5 @@
 import pickle, os.path
 import numpy as np
-import spacy_universal_sentence_encoder
 
 # https://spacy.io/universe/project/spacy-universal-sentence-encoder
 
@@ -11,6 +10,7 @@ def universal_sentence_encoder(df):
             X = pickle.load(f)
             return X
     else:
+        import spacy_universal_sentence_encoder
         nlp = spacy_universal_sentence_encoder.load_model('en_use_lg')
         X = []
         for _, row in tqdm(df.iterrows(), total=df.shape[0]):

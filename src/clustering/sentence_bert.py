@@ -2,7 +2,6 @@ import pickle, os.path
 from tqdm import tqdm
 
 import numpy as np
-import spacy_sentence_bert
 
 # https://spacy.io/universe/project/spacy-sentence-bert
 
@@ -13,6 +12,7 @@ def sentence_bert(df):
             X = pickle.load(f)
             return X
     else:
+        import spacy_sentence_bert
         nlp = spacy_sentence_bert.load_model('en_stsb_roberta_base')
         X = []
         for _, row in tqdm(df.iterrows(), total=df.shape[0]):

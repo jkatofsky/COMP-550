@@ -33,10 +33,11 @@ if __name__ == '__main__':
         vectorizer = "ngram-" + str(args.ngram_size) + "-" + str(args.ngram_type)
 
     # clustering
+    print(X.shape)
     km = KMeans(n_clusters=11, random_state=0).fit(X)
 
     # save model
     now = datetime.now()
-    filename = "../../model/ngram-" + vectorizer.replace("_","-") + "-" + now.strftime("%m-%d-%H-%M") + ".pickle"
+    filename = "../../model/kmeans-" + vectorizer.replace("_","-") + "-" + now.strftime("%m-%d-%H-%M") + ".pickle"
     with open(filename, "wb") as f:
         pickle.dump(km,f)
