@@ -11,7 +11,7 @@ def get_sw():
     # NOTE: sw is a list
     return sw
 
-def ngram(df, ngram_range=(5,5), analyzer='word'):
+def ngram(df, ngram_range=(3,3), analyzer='char_wb'):
     # NOTE: analyzer{‘word’, ‘char’, ‘char_wb’} or callable, default=’word’
     #       ‘char’ is character-by-character ngram
     params = ["ngram",str(ngram_range[0]),analyzer]

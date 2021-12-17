@@ -8,7 +8,6 @@ from sklearn.cluster import KMeans
 
 # read comments, vectorization 
 df = pd.read_csv("../../data/dataset.csv", lineterminator='\n')
-#df = df.head(100) # TODO: delete me, I'm just for testing
 df = df[df["label"] != "UNKNOWN"]
 df.fillna("", inplace=True)
 
@@ -16,8 +15,8 @@ df.fillna("", inplace=True)
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--vectorizer', type=str, required=True)
-    parser.add_argument('--ngram_size', type=int, default=5)
-    parser.add_argument('--ngram_type', type=str, default="word")
+    parser.add_argument('--ngram_size', type=int, default=3)
+    parser.add_argument('--ngram_type', type=str, default="char_wb")
     args = parser.parse_args()
 
     # vectorization
@@ -37,8 +36,7 @@ if __name__ == '__main__':
     km = KMeans(n_clusters=11, random_state=0).fit(X)
 
     # save model
-    model = args.model
     now = datetime.now()
-    filename = "../../model/" + model + "-" + vectorizer + "-" + now.strftime("%m-%d-%H-%M") + ".pickle"
+    filename = "../../model/ngram-" + vectorizer.replace("_","-") + "-" + now.strftime("%m-%d-%H-%M") + ".pickle"
     with open(filename, "wb") as f:
         pickle.dump(km,f)
