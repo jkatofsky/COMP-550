@@ -1,6 +1,9 @@
+import pickle, os.path
+from tqdm import tqdm
+
+import numpy as np
 import nltk
 from nltk.corpus import stopwords
-import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 
 def get_sw():
@@ -13,7 +16,15 @@ def get_sw():
 def ngram(df, ngram_range=(5,5), analyzer='word'):
     # NOTE: analyzer{‘word’, ‘char’, ‘char_wb’} or callable, default=’word’
     #       ‘char’ is character-by-character ngram
-    vectorizer = CountVectorizer(stop_words=get_sw(), ngram_range=ngram_range, analyzer=analyzer)
-    X = vectorizer.fit_transform(df["comment"])
-    print(vectorizer.get_feature_names_out()) 
-    return X
+    params = ["ngram",str(ngram_range[0]),analyzer]
+    filename = "../../vectors/" + "-".join(params) + ".pickle"
+    if os.path.isfile(filename):
+        with open(filename,"rb") as f:
+            X = pickle.load(f)
+            return X
+    else:
+        vectorizer = CountVectorizer(stop_words=get_sw(), ngram_range=ngram_range, analyzer=analyzer)
+        X = vectorizer.fit_transform(df["comment"])
+        with open(filename,"wb") as f:
+            pickle.dump(X,f)
+        return X
