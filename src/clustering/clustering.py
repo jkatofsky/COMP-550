@@ -2,10 +2,8 @@ import pickle
 import argparse
 from datetime import datetime
 
-import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
-from sklearn.mixture import GaussianMixture
 
 
 # read comments, vectorization 

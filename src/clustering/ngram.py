@@ -1,7 +1,5 @@
 import pickle, os.path
-from tqdm import tqdm
 
-import numpy as np
 import nltk
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
