@@ -33,7 +33,6 @@ if __name__ == '__main__':
         vectorizer = "ngram-" + str(args.ngram_size) + "-" + str(args.ngram_type)
 
     # clustering
-    print(X.shape)
     km = KMeans(n_clusters=11, random_state=0).fit(X)
 
     # save model
