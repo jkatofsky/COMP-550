@@ -32,5 +32,5 @@ labels = ["USE", "sBERT", "ngram"]
 plt.bar(range(len(scores)), scores, tick_label=labels)
 plt.xlabel("Vectorization Method")
 plt.ylabel("MI Score")
-plt.title("MI Score across Vectoriation Methods")
-plt.savefig("../../fig/MI Score across Vectoriation Methods.png")
+plt.title("MI Score across Vectorization Methods")
+plt.savefig("../../fig/MI Score across Vectorization Methods.png")
