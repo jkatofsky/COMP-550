@@ -22,10 +22,13 @@ with open("../../model/kmeans-ngram-3-char-wb-12-19-20-02.pickle", "rb") as f:
   ngram = pickle.load(f)
 
 # score model predictions
-USE_score = metrics.adjusted_mutual_info_score(labels_true, USE.labels_)
-sBERT_score = metrics.adjusted_mutual_info_score(labels_true, sBERT.labels_)
-ngram_score = metrics.adjusted_mutual_info_score(_labels_true, ngram.labels_)
+# USE_score = metrics.adjusted_mutual_info_score(labels_true, USE.labels_)
+# sBERT_score = metrics.adjusted_mutual_info_score(labels_true, sBERT.labels_)
+# ngram_score = metrics.adjusted_mutual_info_score(_labels_true, ngram.labels_)
 
+USE_score = metrics.rand_score(labels_true, USE.labels_)
+sBERT_score = metrics.rand_score(labels_true, sBERT.labels_)
+ngram_score = metrics.rand_score(_labels_true, ngram.labels_)
 
 # plot result
 scores = [USE_score,sBERT_score,ngram_score]
@@ -33,6 +36,6 @@ labels = ["USE", "sBERT", "ngram"]
 
 plt.bar(range(len(scores)), scores, tick_label=labels)
 plt.xlabel("Vectorization Method")
-plt.ylabel("MI Score")
-plt.title("MI Score across Vectorization Methods")
-plt.savefig("../../fig/MI Score across Vectorization Methods.png")
+plt.ylabel("Rand Index")
+plt.title("Rand Index across Vectorization Methods")
+plt.savefig("../../fig/Rand Score across Vectorization Methods.png")
