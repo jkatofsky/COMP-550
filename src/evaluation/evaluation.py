@@ -6,23 +6,25 @@ from sklearn import metrics
 
 # get true labels
 df = pd.read_csv("../../data/dataset.csv", lineterminator='\n')
-df = df[df["label"] != "UNKNOWN"]
+to_filter = ['UNKNOWN', 'Management', 'Education', 'Law', 'Music']
+_labels_true = df[df['label'] != 'UNKNOWN']["label"]
+df = df[~df['label'].isin(to_filter)].reset_index()
 df.fillna("", inplace=True)
 labels_true = df["label"]
 labels_true = labels_true.to_numpy()
 
 # load models
-with open("../../model/kmeans-USE-12-17-17-43.pickle","rb") as f:
+with open("../../model/kmeans-USE-12-19-19-56.pickle", "rb") as f:
   USE = pickle.load(f)
-with open("../../model/kmeans-sBERT-12-17-17-43.pickle","rb") as f:
+with open("../../model/kmeans-sBERT-12-19-19-57.pickle", "rb") as f:
   sBERT = pickle.load(f)
-with open("../../model/kmeans-ngram-3-char-wb-12-17-16-58.pickle","rb") as f:
+with open("../../model/kmeans-ngram-3-char-wb-12-19-20-02.pickle", "rb") as f:
   ngram = pickle.load(f)
 
 # score model predictions
 USE_score = metrics.adjusted_mutual_info_score(labels_true, USE.labels_)
 sBERT_score = metrics.adjusted_mutual_info_score(labels_true, sBERT.labels_)
-ngram_score = metrics.adjusted_mutual_info_score(labels_true, ngram.labels_)
+ngram_score = metrics.adjusted_mutual_info_score(_labels_true, ngram.labels_)
 
 
 # plot result

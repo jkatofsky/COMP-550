@@ -1,14 +1,15 @@
+from os import remove
 import pickle
 import argparse
 from datetime import datetime
-
+import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
 
 
 # read comments, vectorization 
 df = pd.read_csv("../../data/dataset.csv", lineterminator='\n')
-df = df[df["label"] != "UNKNOWN"]
+df = df[df["label"] != "UNKNOWN"].reset_index()
 df.fillna("", inplace=True)
 
 
@@ -32,8 +33,13 @@ if __name__ == '__main__':
         X = ngram(df, analyzer=args.ngram_type, ngram_range=(args.ngram_size,args.ngram_size)) 
         vectorizer = "ngram-" + str(args.ngram_size) + "-" + str(args.ngram_type)
 
-    # clustering
-    km = KMeans(n_clusters=11, random_state=0).fit(X)
+    to_filter = ['Management', 'Education', 'Law', 'Music']
+    remove_indicies = df.index[df['label'].isin(to_filter)].tolist()
+    print(X, remove_indicies)
+    print(X.shape)
+    X = np.delete(X, remove_indicies, axis=0)
+    print(X.shape)
+    km = KMeans(n_clusters=7, random_state=0).fit(X)
 
     # save model
     now = datetime.now()
