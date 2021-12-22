@@ -7,7 +7,6 @@ from sklearn import metrics
 # get true labels
 df = pd.read_csv("../../data/dataset.csv", lineterminator='\n')
 to_filter = ['UNKNOWN', 'Management', 'Education', 'Law', 'Music']
-_labels_true = df[df['label'] != 'UNKNOWN']["label"]
 df = df[~df['label'].isin(to_filter)].reset_index()
 df.fillna("", inplace=True)
 labels_true = df["label"]
@@ -28,7 +27,7 @@ with open("../../model/kmeans-ngram-3-char-wb-12-19-20-02.pickle", "rb") as f:
 
 USE_score = metrics.rand_score(labels_true, USE.labels_)
 sBERT_score = metrics.rand_score(labels_true, sBERT.labels_)
-ngram_score = metrics.rand_score(_labels_true, ngram.labels_)
+ngram_score = metrics.rand_score(labels_true, ngram.labels_)
 
 # plot result
 scores = [USE_score,sBERT_score,ngram_score]
